@@ -1,0 +1,69 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+
+\usepackage[preprint,nonatbib]{neurips_2024}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{caption}  % To add a caption
+\usepackage{tcolorbox} % For creating colored or framed boxes
+\usepackage{subcaption}
+
+\pgfplotsset{compat=1.18}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Assignment \#1\\
+  \vspace{2mm}
+  \small{Elements of Machine Learning}
+  \\
+  \vspace{2mm}
+  \small{Saarland University -- Winter Semester 2024/25}
+}
+
+\author{%
+\textbf{Rabin Adhikari} \\
+  7072310 \\
+  \texttt{raad00002@stud.uni-saarland.de} \\
+  \and
+  \textbf{Dhimitrios Duka} \\
+ 7059153 \\
+  \texttt{dhdu00001@stud.uni-saarland.de} \\
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 2 (Bias Variance Trade-off)}
+In the first example, we are using only one house feature to predict the house price. This oversimplifies the problem, resulting in \textbf{high bias}.
+Also, the number of data points in the dataset should be enough to train two parameters of the model and should result in a \textbf{low variance}.
+However, the reduction in $RSS$ due to low variance is most likely nullified by a high bias, resulting in a high $RSS$ due to underfitting.
+
+In the second example, in contrast to the first one, we are making use of all available predictors. However, the number of samples is even lower this time, $n=50$. So, we are in a situation where the model has more parameters and less training samples. In this kind of scenario, the model would simply overfit the data. This means that the model would have \textbf{low bias} but \textbf{high variance}.
+
+In the third and final example, we are using only a subset of important predictors and a large dataset. In this scenario, the model is complex enough to capture most of the complexity of the underlying relationship between the predictors and the output and has plenty of training data to properly learn the underlying data distribution. This puts the model in a \textbf{low bias} and \textbf{low variance} regime.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \bibliographystyle{unsrt}
+% \bibliography{references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

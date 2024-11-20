@@ -1,0 +1,296 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+
+\usepackage[preprint,nonatbib]{neurips_2024}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{caption}  % To add a caption
+\usepackage{tcolorbox} % For creating colored or framed boxes
+\usepackage{subcaption}
+
+\pgfplotsset{compat=1.18}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Assignment \#1\\
+  \vspace{2mm}
+  \small{Elements of Machine Learning}
+  \\
+  \vspace{2mm}
+  \small{Saarland University -- Winter Semester 2024/25}
+}
+
+\author{%
+\textbf{Rabin Adhikari} \\
+  7072310 \\
+  \texttt{raad00002@stud.uni-saarland.de} \\
+  \and
+  \textbf{Dhimitrios Duka} \\
+ 7059153 \\
+  \texttt{dhdu00001@stud.uni-saarland.de} \\
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 3 (Linear Regression)}
+\subsection*{Derive Residual Sum of Squares (RSS) is the sum of squared residuals for all data points. Make sure to customize it to our model.}
+First, we will start by defining the Residual Sum of Squares ($RSS$) formula. Mathematically, $RSS$ is defined as:
+
+\begin{equation}
+  RSS = \sum_{i=1}^N e_i^2 = \sum_{i=1}^N (y_i - \hat{y}_i)^2
+  \label{eq:rss_v1}
+\end{equation}
+
+Furthermore, Equation~\ref{eq:rss_v1} can be expressed in matrix notation as follows:
+
+\begin{equation}
+  RSS = \mathbf{(Y - X \boldsymbol{\hat{\beta}})^T (Y - X\boldsymbol{\hat{\beta}})}
+\end{equation}
+
+For our model, RSS can be expanded as:
+
+\begin{equation}
+    \label{eqn:rss}
+    RSS = \sum_{i=1}^N \left( y_i - \hat{\beta}_0 - \hat{\beta}_1x_{i1} - \hat{\beta}_2x_{i2} \right)^2
+\end{equation}
+
+\subsection*{Derive and compute the estimates $\hat{\beta}_0$, $\hat{\beta}_1$, $\hat{\beta}_2$ that minimize the residual sum of squares by taking the partial derivatives of the RSS with respect to each coefficient.}
+
+We need to derive and compute the estimates $\hat{\beta_0}$, $\hat{\beta_1}$ and $\hat{\beta_2}$ that minimize the $RSS$. Because $RSS$ is a convex problem, we can just take the partial derivatives of the $RSS$ w.r.t each estimate and set it to $0$. First, we will start with $\hat{\beta_0}$ since that is also the simplest one.
+
+\begin{equation}
+  \begin{split}
+     \frac{\partial RSS}{\partial \hat{\beta}_0} &= \sum_{i=1}^N 2 \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{i1} - \hat{\beta}_2 x_{i2} \right) \cdot (-1) \\
+      &= -2 \sum_{i=1}^N \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{i1} - \hat{\beta}_2 x_{i2} \right)
+  \end{split}
+\end{equation}
+
+Equating it with zero, we get:
+
+\begin{equation}
+  \label{eqn:beta0}
+  \begin{split}
+      -2 \sum_{i=1}^N \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{i1} - \hat{\beta}_2x_{i2} \right) &= 0 \\
+      \sum_{i=1}^N y_i -  \sum_{i=1}^N \hat{\beta}_0 -  \hat{\beta}_1  \sum_{i=1}^N x_{i1} - \hat{\beta}_2  \sum_{i=1}^N x_{i2} &= 0 \\
+      \sum_{i=1}^N y_i -  N\hat{\beta}_0 -  \hat{\beta}_1  \sum_{i=1}^N x_{i1} - \hat{\beta}_2  \sum_{i=1}^N x_{i2} &= 0 \\
+      \frac{1}{N}\sum_{i=1}^{N} y_i - \frac{\hat{\beta_1}}{N}\sum_{i=1}^{N}x_{i1} - \frac{\hat{\beta_2}}{N}\sum_{i=1}^{N}x_{i2} &= \hat{\beta_0} 
+  \end{split}
+\end{equation}
+
+Next, following a similar procedure, we can derive the estimates for $\hat{\beta_1}$ and $\hat{\beta_2}$. First, we will derive the estimate for $\hat{\beta_1}$.
+
+\begin{equation}
+  \begin{split}
+     \frac{\partial RSS}{\partial \hat{\beta}_1} &= \sum_{i=1}^N 2 \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{i1} - \hat{\beta}_2 x_{i2} \right) \cdot (-x_{i1}) \\
+      &= -2 \sum_{i=1}^N x_{i1} \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{i1} - \hat{\beta}_2 x_{i2} \right)
+  \end{split}
+\end{equation}
+
+Equating it with zero, we get:
+
+\begin{equation}
+    \begin{split}
+       -2 \sum_{i=1}^N x_{i1} \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_{i1} - \hat{\beta}_2 x_{i2} \right) &= 0 \\
+       \sum_{i=1}^N x_{i1} y_i - \sum_{i=1}^N \hat{\beta}_0 x_{i1} - \sum_{i=1}^N \hat{\beta}_1 x_{i1}^2 - \sum_{i=1}^N \hat{\beta}_2 x_{i1} x_{i2} &= 0
+    \end{split}
+\end{equation}
+
+So, we get:
+
+\begin{equation}
+    \label{eqn:beta1}
+    \begin{split}
+      \hat{\beta}_0 \cdot \sum_{i=1}^N x_{i1} + \hat{\beta}_1 \sum_{i=1}^N x_{i1}^2 + \hat{\beta}_2 \sum_{i=1}^N x_{i1} x_{i2} &= \sum_{i=1}^N x_{i1} y_i \\
+      \frac{\sum_{i=1}^{N} y_i~x_{i1} - \hat{\beta_0}\sum_{i=1}^{N}~x_{i1} - \hat{\beta_2}\sum_{i=1}^{N}~x_{i1}x_{i2}}{\sum_{i=1}^{N}x_{i1}^2} &= \hat{\beta_1} 
+    \end{split}
+\end{equation}
+
+Similarly, due to symmetry, we can obtain the optimal value for $\hat{\beta}_2$ also by replacing $x_{i1}$ with $x_{i2}$ and vice versa, $\hat{\beta}_1$ with $\hat{\beta}_2$ and vice versa.
+
+\begin{equation}
+    \label{eqn:beta2}
+    \begin{split}
+      \hat{\beta}_0 \cdot \sum_{i=1}^N x_{i2} + \hat{\beta}_1 \sum_{i=1}^N x_{i1} x_{i2} + \hat{\beta}_2 \sum_{i=1}^N x_{i2}^2 &= \sum_{i=1}^N x_{i2} y_i \\
+      \frac{\sum_{i=1}^{N} y_i~x_{i2} - \hat{\beta_0}\sum_{i=1}^{N}~x_{i2} - \hat{\beta_1}\sum_{i=1}^{N}x_{i1}x_{i2}}{\sum_{i=1}^{N}x_{i2}^2} &= \hat{\beta_2}       
+    \end{split}
+\end{equation}
+
+Now, solving equations~\ref{eqn:beta0},~\ref{eqn:beta1}, and~\ref{eqn:beta2}, we get the optimal values of $\hat{\beta}_0$, $\hat{\beta}_1$, and $\hat{\beta}_2$, for least squares method.
+
+\begin{table}[h!]
+  \centering
+  \caption{The calculation of parameters for the normal equations.}
+  \label{tab:caclulation}
+  \begin{tabular}{l|cccclccc}
+      \hline
+       & $x_{i1}$ & $x_{i2}$ & $y_i$ & $x_{i1}^2$ & $x_{i2}^2$ & $x_{i1} \cdot x_{i2}$ & $x_{i1} \cdot y_i$ & $x_{i2} \cdot y_i$ \\
+       \hline
+          & 1  & 2  & 5  & 1  & 4  & 2  & 5  & 10  \\
+          & 2  & 1  & 6  & 4  & 1  & 2  & 12 & 6   \\
+          & 3  & 3  & 9  & 9  & 9  & 9  & 27 & 27  \\
+          & 4  & 2  & 10 & 16 & 4  & 8  & 40 & 20  \\
+          & 5  & 3  & 13 & 25 & 9  & 15 & 65 & 39  \\
+      \hline
+      Sum & 15 & 11 & 43 & 55 & 27 & 36 & 149 & 102
+  \end{tabular}
+\end{table}
+
+So, using \autoref{tab:caclulation} and the normal equations we get the following equations.
+\begin{equation*}
+    \begin{split}
+       43 &=  5 \hat{\beta}_0 +  15 \hat{\beta}_1 + 11 \hat{\beta}_2\\
+       149 &= 15 \hat{\beta}_0 + 55 \hat{\beta}_1 + 36 \hat{\beta}_2 \\
+       102 &= 11 \hat{\beta}_0 + 36 \hat{\beta}_1 + 27 \hat{\beta}_2
+    \end{split}
+\end{equation*}
+
+Solving above equations, we get, $\hat{\beta}_0 = 1.642$, $\hat{\beta}_1 = 1.779$, and $\hat{\beta}_2 = 0.737$.
+
+\subsection*{Compute the R-square value for our model.}
+
+We know that $R^2$ is defined as $R^2 = 1 - \frac{RSS}{TSS}$, where $TSS = \sum_{i=0}^N \left( y_i - \overline{y} \right)^2$ and $RSS = \sum_{i=0}^N \left( y_i - \hat{y}_i \right)^2$.
+So, to calculate RSS and TSS let us calculate the necessary values in \autoref{tab:r2_calc}.
+
+\begin{table}[h!]
+    \centering
+    \caption{Calculations for $R^2$ with $\overline{y} = 8.6$}
+    \label{tab:r2_calc}
+    \begin{tabular}{c|c|c|c|c|c}
+        \hline
+        $x_{i1}$ & $x_{i2}$ & $y_i$ & $\hat{y}_i$ & $(y_i - \overline{y})^2$ & $(y_i - \hat{y})^2$ \\
+        \hline
+        $1$ & $2$ & $5$ & $4.895$& $12.96$ & $0.011$\\
+        $2$ & $1$ & $6$ & $5.937$ & $6.76$ & $0.0040$\\
+        $3$ & $3$ & $9$ & $9.189$ & $0.16$ & $0.036$\\
+        $4$ & $2$ & $10$ & $10.232$ & $1.96$ & $0.054$\\
+        $5$ & $3$ & $13$ & $12.747$ & $19.36$ & $0.064$\\
+        % \hline
+    \end{tabular}
+\end{table}
+
+From the above table, we get $RSS = 0.168$ and $TSS = 41.2$.
+Hence, $R^2$ can be calculated as $R^2 = 1 - \frac{0.168}{41.2} = 0.9959 \approx 1$.
+
+
+% First, we will start by calculating the Residual Sum of Squares formula and all the available data points. From the second lecture, we know that RSS is defined as:
+
+% \begin{equation}
+%   \begin{aligned}
+%     RSS &= \sum_{i=1}^{N} e_i^2 \\
+%         &= \sum_{i=1}^{N} (y_i - \hat{y}_i)^2 \\
+%         &= \sum_{i=1}^{N} (y_i - \hat{\beta_0} - \hat{\beta_1}x_{i1} - \hat{\beta_2}x_{i2})^2
+%   \end{aligned}
+% \end{equation}
+
+% where $N$ is the total number of data points.
+
+% Next, we need to derive and compute the estimates $\hat{\beta_0}$, $\hat{\beta_1}$ and $\hat{\beta_2}$ that minimize the RSS. Because this is a convex problem, we can just take the partial derivatives of the RSS w.r.t each estimate and set it to $0$. First, we will start with $\hat{\beta_0}$ since that is also the simplest one.
+
+% \begin{equation}
+%   \begin{aligned}
+%     \frac{\partial}{\partial{\hat{\beta_0}}}[\sum_{i=1}^{N} (y_i - \hat{\beta_0} - \hat{\beta_1}x_{i1} - \hat{\beta_2}x_{i2})^2] &= 0 \\
+%     \sum_{i=1}^{N}(-y_i + \hat{\beta_0} + \hat{\beta_1}x_{i1} + \hat{\beta_2}x_{i2}) &= 0 \\
+%     -\sum_{i=1}^{N} y_i + N\hat{\beta_0} + \hat{\beta_1}\sum_{i=1}^{N}x_{i1} + \hat{\beta_2}\sum_{i=1}^{N}x_{i2} &= 0 \\  
+%      \frac{1}{N}\sum_{i=1}^{N} y_i - \frac{\hat{\beta_1}}{N}\sum_{i=1}^{N}x_{i1} - \frac{\hat{\beta_2}}{N}\sum_{i=1}^{N}x_{i2} &= \hat{\beta_0} 
+%   \end{aligned}
+% \end{equation}
+
+% Setting $\frac{1}{N}\sum_{i=1}^{N}y_i = \bar{y}$, $\frac{1}{N}\sum_{i=1}^{N}x_{i1} = \bar{x}_1$, and $\frac{1}{N}\sum_{i=1}^{N}x_{i2} = \bar{x}_2$, we can rewrite the equation as:
+
+% \begin{equation}
+%   \begin{aligned}
+%     \hat{\beta_0} &= \bar{y} - \hat{\beta_1}\bar{x}_1 - \hat{\beta_2}\bar{x}_2
+%   \end{aligned}
+% \end{equation}
+
+% Next, following a similar procedure, we can derive the estimates for $\hat{\beta_1}$ and $\hat{\beta_2}$. First, we will derive the estimate for $\hat{\beta_1}$.
+
+% \begin{equation}
+%   \begin{aligned}
+%     \frac{\partial}{\partial{\hat{\beta_1}}}[\sum_{i=1}^{N} (y_i - \hat{\beta_0} - \hat{\beta_1}x_{i1} - \hat{\beta_2}x_{i2})^2] &= 0 \\
+%     \sum_{i=1}^{N}(-y_i + \hat{\beta_0} + \hat{\beta_1}x_{i1} + \hat{\beta_2}x_{i2})(x_{i1}) &= 0 \\
+%     -\sum_{i=1}^{N} y_i~x_{i1} + \hat{\beta_0}\sum_{i=1}^{N}~x_{i1} + \hat{\beta_1}\sum_{i=1}^{N}x_{i1}^2 + \hat{\beta_2}\sum_{i=1}^{N}~x_{i1}x_{i2} &= 0 \\  
+%      \frac{\sum_{i=1}^{N} y_i~x_{i1} - \hat{\beta_0}\sum_{i=1}^{N}~x_{i1} - \hat{\beta_2}\sum_{i=1}^{N}~x_{i1}x_{i2}}{\sum_{i=1}^{N}x_{i1}^2} &= \hat{\beta_1} 
+%   \end{aligned}
+% \end{equation}
+
+% Finally, we can derive the estimate for $\hat{\beta_2}$.
+
+% \begin{equation}
+%   \begin{aligned}
+%     \frac{\partial}{\partial{\hat{\beta_2}}}[\sum_{i=1}^{N} (y_i - \hat{\beta_0} - \hat{\beta_1}x_{i1} - \hat{\beta_2}x_{i2})^2] &= 0 \\
+%     \sum_{i=1}^{N}(-y_i + \hat{\beta_0} + \hat{\beta_1}x_{i1} + \hat{\beta_2}x_{i2})(x_{i2}) &= 0 \\
+%     -\sum_{i=1}^{N} y_i~x_{i2} + \hat{\beta_0}\sum_{i=1}^{N}~x_{i2} + \hat{\beta_1}\sum_{i=1}^{N}x_{i1}x_{i2} + \hat{\beta_2}\sum_{i=1}^{N}x_{i2}^2 &= 0 \\  
+%      \frac{\sum_{i=1}^{N} y_i~x_{i2} - \hat{\beta_0}\sum_{i=1}^{N}~x_{i2} - \hat{\beta_1}\sum_{i=1}^{N}x_{i1}x_{i2}}{\sum_{i=1}^{N}x_{i2}^2} &= \hat{\beta_2} 
+%   \end{aligned}
+% \end{equation}
+
+% In order to calculate the estimates for $\hat{\beta_1}$ and $\hat{\beta_2}$, we need to calculate the following sums:
+
+% \begin{table}[h!]
+%   \centering
+%   \caption{Results of the model for the given tasks.}
+%   \begin{tabular}{ccc}
+%     \toprule
+%     \textbf{$x_{i1}$} & \textbf{$x_{i2}$} & \textbf{$y_i$} \text{}\\
+%     \midrule
+%  1        & 2                                     & 5                                   \\
+%  2        & 1                                     & 6                                   \\
+%  3        & 3                                     & 9                                   \\
+%  4        & 2                                     & 10                                   \\
+%  5        & 3                                     & 13                                  \\
+%     \bottomrule\label{tab:results}
+%   \end{tabular}
+% \end{table}
+
+% \begin{equation}
+%   \begin{aligned}
+%     \frac{1}{N}\sum_{i=1}^{N}y_i &= \frac{(5 + 6 + 9 + 10 + 13)}{5} = 8.6 \\
+%     \frac{1}{N}\sum_{i=1}^{N}x_{i1} &= \frac{(1 + 2 + 3 + 4 + 5)}{5} = 3 \\
+%     \frac{1}{N}\sum_{i=1}^{N}x_{i2} &= \frac{(2 + 1 + 3 + 2 + 3)}{5} = 2.2 \\
+%     \sum_{i=1}^{N} y_i~x_{i1} &= (5\times1 + 6\times2 + 9\times3 + 10\times4 + 13\times5) = 149 \\
+%     \sum_{i=1}^{N}x_{i1} &= (1 + 2 + 3 + 4 + 5) = 15 \\
+%     \sum_{i=1}^{N}x_{i1}^2 &= (1^2 + 2^2 + 3^2 + 4^2 + 5^2) = 55 \\
+%     \sum_{i=1}^{N}~x_{i1}x_{i2} &= (1\times2 + 2\times1 + 3\times3 + 4\times2 + 5\times3) = 36 \\
+%     \sum_{i=1}^{N} y_i~x_{i2} &= (5\times2 + 6\times1 + 9\times3 + 10\times2 + 13\times3) = 102 \\
+%     \sum_{i=1}^{N}~x_{i2} &= (2 + 1 + 3 + 2 + 3) = 11 \\
+%     \sum_{i=1}^{N}x_{i2}^2 &= (2^2 + 1^2 + 3^2 + 2^2 + 3^2) = 25 \\
+%   \end{aligned}
+% \end{equation}
+
+% Now that we are done with the calculations, we can build a linear system of equations to solve for $\hat{\beta_0}$, $\hat{\beta_1}$ and $\hat{\beta_2}$.
+
+% \begin{equation}
+%   \begin{aligned}
+%     \hat{\beta_0} &= 8.6 - 3\hat{\beta_1} - 2.2\hat{\beta_2}\times \\
+%     \hat{\beta_1} &= \frac{149 - 15\hat{\beta}_0 - 36\hat{\beta}_2}{55} \\
+%     \hat{\beta_2} &= \frac{102 - 11\hat{\beta}_0 - 36\hat{\beta}_1}{25} \\
+%   \end{aligned}
+% \end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \bibliographystyle{unsrt}
+% \bibliography{references} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

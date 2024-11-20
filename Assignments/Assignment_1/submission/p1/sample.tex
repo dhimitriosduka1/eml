@@ -1,0 +1,71 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+
+\usepackage[preprint,nonatbib]{neurips_2024}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{caption}  % To add a caption
+\usepackage{tcolorbox} % For creating colored or framed boxes
+\usepackage{subcaption}
+
+\pgfplotsset{compat=1.18}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Assignment \#1\\
+  \vspace{2mm}
+  \small{Elements of Machine Learning}
+  \\
+  \vspace{2mm}
+  \small{Saarland University -- Winter Semester 2024/25}
+}
+
+\author{%
+\textbf{Rabin Adhikari} \\
+  7072310 \\
+  \texttt{raad00002@stud.uni-saarland.de} \\
+  \and
+  \textbf{Dhimitrios Duka} \\
+ 7059153 \\
+  \texttt{dhdu00001@stud.uni-saarland.de} \\
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 1 (Parametric and Non-parametric models)}
+A parametric model reduces the problem of estimating a function $f$ in finding a set of parameters $\theta$ that best fit the data. When such a model is used, we go through a two-step process. First, we assume the form of the function $f$. This assumption can be as simple as a linear function. Then, we use the training data to train the model, thus estimating the original function $f$. On the other hand, a non-parametric model doesn't make any assumptions for the form of the underlying function $f$. With such models, we aim to find the true form of the function, not an estimation of it. 
+
+In terms of complexity, parametric models exhibit a low complexity since the problem boils down to finding a fixed number of parameters, which doesn't increase with the increase in data points. In contrast, non-parametric models exhibit a high complexity because we aim to find the true form of the underlying function $f$. Therefore, the complexity of this model increases with the increase in the number of data points.
+
+In terms of flexibility, non-parametric models are more flexible than parametric models. This means that non-parametric models can estimate a more complex family of functions without any prior assumptions. In contrast, parametric methods rely on making an assumption on the form of the underlying function $f$, for example, a simple linear assumption, and consequently, limit the family of functions that the model can estimate.
+
+Parametric methods assume a specific form of target data distribution, such as a simple linear relationship in the case of linear models. In contrast, non-parametric models don't make this assumption, such as $k$-NN regression, resulting in a more flexible model.
+
+For both parametric and non-parametric models, training on a small dataset wouldn't result in very good generalization. However, parametric models tend to generalize better since they rely only on a few number of parameters $\theta$. On the other hand, having a large dataset would be beneficial for both model types. Both models, if used properly, would generalize to unseen data.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \bibliographystyle{unsrt}
+% \bibliography{references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
