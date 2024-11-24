@@ -46,34 +46,29 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Problem 3 (Linear \& Quadratic Discriminate Analysis)}
-\subsection{a)} Let's first define the datapoints for each of the two classes.
+\textbf{a)} To begin with, we will summarize the data points for each class in the table below.
 
 \begin{table}[h!]
   \centering
   \caption{
-    Data for \(x_1\), \(x_2\), and their respective classes.
+    Data for \(x_1\), \(x_2\), and class comparison.
   }
-  \begin{tabular}{ccc}
+  \begin{tabular}{cc|cc}
     \toprule
-    \textbf{\(x_1\)} & \textbf{\(x_2\)} & \textbf{Class} \\
+    \multicolumn{2}{c}{\textbf{Class 0}} & \multicolumn{2}{c}{\textbf{Class 1}} \\
     \midrule
-    1 & 1 & 0 \\
-    2 & 1 & 0 \\
-    3 & 2 & 0 \\
-    2 & 3 & 0 \\
-    1 & 3 & 0 \\
-    \midrule
-    7 & 1 & 1 \\
-    5 & 2 & 1 \\
-    6 & 4 & 1 \\
-    4 & 5 & 1 \\
-    6 & 5 & 1 \\
+    \(x_1\) & \(x_2\) & \(x_1\) & \(x_2\) \\
+    1 & 1 & 7 & 1 \\
+    2 & 1 & 5 & 2 \\
+    3 & 2 & 6 & 4 \\
+    2 & 3 & 4 & 5 \\
+    1 & 3 & 6 & 5 \\
     \bottomrule
   \end{tabular}
-  \label{tab:x1_x2_classes}
+  \label{tab:x1_x2_classes_side_by_side}
 \end{table}
 
-First, let's calculate the mean of each class. The mean of the first class $\mu_0$ would be:
+First, let's calculate the mean of each class.
 
 \begin{equation}
   \mu_0 = \frac{1}{5} \sum_{i=1}^{5} X_i = \frac{1}{5} \left( \begin{bmatrix} 1 \\ 1 \end{bmatrix} + \begin{bmatrix} 2 \\ 1 \end{bmatrix} + \begin{bmatrix} 3 \\ 2 \end{bmatrix} + \begin{bmatrix} 2 \\ 3 \end{bmatrix} + \begin{bmatrix} 1 \\ 3 \end{bmatrix} \right) = \begin{bmatrix} 1.8 \\ 2 \end{bmatrix}
@@ -85,50 +80,132 @@ Similarly, the mean of the second class $\mu_1$ would be:
   \mu_1 = \frac{1}{5} \sum_{i=6}^{10} X_i = \frac{1}{5} \left( \begin{bmatrix} 7 \\ 1 \end{bmatrix} + \begin{bmatrix} 5 \\ 2 \end{bmatrix} + \begin{bmatrix} 6 \\ 4 \end{bmatrix} + \begin{bmatrix} 4 \\ 5 \end{bmatrix} + \begin{bmatrix} 6 \\ 5 \end{bmatrix} \right) = \begin{bmatrix} 5.6 \\ 3.4 \end{bmatrix}
 \end{equation}
 
-The covariance matrix for two predictors $x_1$ and $x_2$ and a class $k$ is defined as follows:
+Now, we can calculate the covariance matrix for each class. In terms of expectations, the covariance matrix for class $k$ is defined as follows:
 
 \begin{equation}
-  \Sigma_k = \begin{bmatrix}
-    var(x^k_1) & cov(x^k_1, x^k_2) \\
-    cov(x^k_1, x^k_2) & var(x^k_2)
-  \end{bmatrix}
-\end{equation}
-
-First, let's calculate the covariance matrix for class $k = 0$. The covariance matrix for class $k = 0$ would be:
-
-\begin{equation}
-  \Sigma_0 = \begin{bmatrix}
-    \mathbb{E}[(x^0_1)^2] - \mathbb{E}[x^0_1]^2 & \mathbb{E}[x^0_1x^0_2] - \mathbb{E}[x^0_1]\mathbb{E}[x^0_2] \\
+  \Sigma_k = \frac{n}{n - 1}\begin{bmatrix}
+    \mathbb{E}[(x^k_1)^2] - \mathbb{E}[x^k_1]^2 & \mathbb{E}[x^k_1x^k_2] - \mathbb{E}[x^k_1]\mathbb{E}[x^k_2] \\
     \\
-    \mathbb{E}[x^0_1x^0_2] - \mathbb{E}[x^0_1]\mathbb{E}[x^0_2] & \mathbb{E}[(x^0_2)^2] - \mathbb{E}[x^0_2]^2
+    \mathbb{E}[x^k_1x^k_2] - \mathbb{E}[x^k_1]\mathbb{E}[x^k_2] & \mathbb{E}[(x^k_2)^2] - \mathbb{E}[x^k_2]^2
   \end{bmatrix}
 \end{equation}
 
-Calculating the expectations and substituting the values, we get:
+where the term $\frac{n}{n - 1}$ is used to correct the bias in the estimation of the covariance matrix. The covariance matrix for class $k = 0$ would be:
+
 \begin{equation}
-  \Sigma_0 = \begin{bmatrix}
+  \Sigma_0 = \frac{5}{4}\begin{bmatrix}
+    0.56 & 0 \\
+    0 & 0.8
+  \end{bmatrix}
+  = \begin{bmatrix}
     0.7 & 0 \\
     0 & 1
   \end{bmatrix}
 \end{equation}
 
-Following a similiar aproach, we can calculate the covariance matrix for class $k = 1$. The reuslting covariance matrix would be:
+Similarly, the covariance matrix for class $k = 1$ would be:
 
 \begin{equation}
-  \Sigma_1 = \begin{bmatrix}
+  \Sigma_1 = \frac{5}{4}\begin{bmatrix}
+    1.04 & -0.84 \\
+    -0.84 & 2.64
+  \end{bmatrix}
+  = \begin{bmatrix}
     1.3 & -1.05 \\
     -1.05 & 3.3
   \end{bmatrix}
 \end{equation}
 
-NOTE: Fix the computations for the covariance matrices.
-
-\subsection{b)}
-In order to determin in which class the new data point is going to be classified, we need to calculate the discriminant function for each class. The discriminant function for class $k$ is defined as follows:
+\textbf{b)}
+To determin in which class the new data point is going to be classified, we need to evaluate the difference between the discriminant functions for each class. The discriminant function for class $k$ is defined as follows:
 
 \begin{equation}
-  \delta_k(x) = x^T \Sigma_k^{-1}\mu_k - \frac{1}{2}\mu_k \Sigma_k^{-1}\mu_k + \log(\pi_k)
+  \delta_k(x) = x^T \Sigma^{-1}\mu_k - \frac{1}{2}\mu_k^T \Sigma^{-1}\mu_k + \log(\pi_k)
 \end{equation}
+
+where $\pi_k$ is the prior probability of class $k$. Because we have only two classes, we can write the difference between the discriminant functions for class $k = 0$ and $k = 1$ as follows:
+
+\begin{equation}
+  \delta_0(x) - \delta_1(x) = x^T \Sigma^{-1}\mu_0 - \frac{1}{2}\mu_0^T \Sigma^{-1}\mu_0 + \log(\pi_0) - x^T \Sigma^{-1}\mu_1 + \frac{1}{2}\mu_1^T \Sigma^{-1}\mu_1 - \log(\pi_1)
+\end{equation}
+
+Because the priors are equal, we ca rewrite the equation as follows:
+
+\begin{equation}
+  \delta_0(x) - \delta_1(x) = x^T \Sigma^{-1}\mu_0 - \frac{1}{2}\mu_0^T \Sigma^{-1}\mu_0 - x^T \Sigma^{-1}\mu_1 + \frac{1}{2}\mu_1^T \Sigma^{-1}\mu_1
+\end{equation}
+
+If the difference is positive, it means that the new data point belongs to class $k = 0$. Otherwise, it belongs to class $k = 1$.
+
+We must note however that the covariance matrix is the same for both discriminants. 
+Therefore, we need to calculate the pooled covariance matrix $\Sigma$. This can be done as follows:
+
+\begin{equation}
+  \Sigma = \frac{1}{N - k} \sum_{i=1}^{k} (n_i - 1) \Sigma_i
+\end{equation}
+
+where $N$ is the total number of samples, $k$ is the number of classes, and $n_i$ is the number of samples in class $i$. In our case, $N = 10$, $k = 2$, and $n_0 = n_1 = 5$. Therefore, the pooled covariance matrix would be:
+
+\begin{equation}
+  \Sigma = \frac{1}{10 - 2} \left( 4 \begin{bmatrix}
+    0.7 & 0 \\
+    0 & 1
+  \end{bmatrix} + 4 \begin{bmatrix}
+    1.3 & -1.05 \\
+    -1.05 & 3.3
+  \end{bmatrix} \right)
+  = \begin{bmatrix}
+    1 & -0.525 \\
+    -0.525 & 2.15
+  \end{bmatrix}
+\end{equation}
+
+Using numpy, we can calculate the inverse of the pooled covariance. The code is shown below: 
+
+\begin{tcolorbox}
+
+\begin{verbatim}
+  import numpy as np
+  Sigma = np.array([[1, -0.525], [-0.525, 2.15]])
+  Sigma_inv = np.linalg.inv(Sigma)
+\end{verbatim}
+\end{tcolorbox}
+
+Therefore, the inverse of the pooled covariance matrix is:
+
+\begin{equation}
+  \Sigma^{-1} = \begin{bmatrix}
+    1.147 & 0.280 \\
+    0.280 & 0.533
+  \end{bmatrix}
+\end{equation}
+
+Now, we can calculate the difference between the discriminant functions for each class. 
+
+\begin{equation}
+  \begin{aligned}
+    \delta_0(x) - \delta_1(x) &= \begin{bmatrix} 3.5 \\ 2 \end{bmatrix}^T \begin{bmatrix}
+      1.147 & 0.280 \\
+      0.280 & 0.533
+    \end{bmatrix}\begin{bmatrix} 1.8 \\ 2 \end{bmatrix} - \frac{1}{2}\begin{bmatrix} 1.8 \\ 2 \end{bmatrix}^T
+    \begin{bmatrix}
+      1.147 & 0.280 \\
+      0.280 & 0.533
+    \end{bmatrix}\begin{bmatrix} 1.8 \\ 2 \end{bmatrix} \\
+    &- \begin{bmatrix} 3.5 \\ 2 \end{bmatrix}^T \begin{bmatrix}
+      1.147 & 0.280 \\
+      0.280 & 0.533
+    \end{bmatrix}\begin{bmatrix} 5.6 \\ 3.4 \end{bmatrix} + \frac{1}{2}\begin{bmatrix} 5.6 \\ 3.4 \end{bmatrix}^T \begin{bmatrix}
+      1.147 & 0.280 \\
+      0.280 & 0.533
+    \end{bmatrix}\ \begin{bmatrix} 5.6 \\ 3.4 \end{bmatrix} \\
+  \delta_0(x) - \delta_1(x) &= 2.218
+  \end{aligned} 
+\end{equation}
+
+This means that the new data point would be classified as class $k = 0$.
+
+\textbf{c)} Both LDA and QDA assume that the data of each class is normally distributed. However, LDA assumes that the convariance matrix is the same for all classes, which usually is not the case. On the other hand, QDA lifts this restriction and allows for different covariance matrices for each class. This makes QDA more flexible and capable of capturing more complex decision boundaries.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage

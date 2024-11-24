@@ -59,3 +59,14 @@ print("\nClass 1 Mean Vector:")
 print(mean_1)
 print("\nClass 1 Covariance Matrix:")
 print(covariance_1)
+
+x = np.array([3.5, 2])
+Sigma = np.array([[1, -0.525], [-0.525, 2.15]])
+Sigma_inv = np.linalg.inv(Sigma)
+
+print("\nSigma Inverse: {}".format(Sigma_inv))
+
+res = x.T @ Sigma_inv @ mean_0 - 1/2 * mean_0.T @ Sigma_inv @ mean_0 \
+    - x.T @ Sigma_inv @ mean_1 + 1/2 * mean_1.T @ Sigma_inv @ mean_1
+
+print("\nResult: {}".format(res))
