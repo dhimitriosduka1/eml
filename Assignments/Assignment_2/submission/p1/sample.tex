@@ -1,0 +1,126 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+
+\usepackage[preprint,nonatbib]{neurips_2024}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{caption}  % To add a caption
+\usepackage{tcolorbox} % For creating colored or framed boxes
+\usepackage{subcaption}
+
+\pgfplotsset{compat=1.18}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Assignment \#2\\
+  \vspace{2mm}
+  \small{Elements of Machine Learning}
+  \\
+  \vspace{2mm}
+  \small{Saarland University -- Winter Semester 2024/25}
+}
+
+\author{%
+\textbf{Rabin Adhikari} \\
+  7072310 \\
+  \texttt{raad00002@stud.uni-saarland.de} \\
+  \and
+  \textbf{Dhimitrios Duka} \\
+ 7059153 \\
+  \texttt{dhdu00001@stud.uni-saarland.de} \\
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 1 (Introduction to Logistic Regression)}
+\textbf{a)} From the exercise description, we know that we only have a single feature $X \in \mathbb{R}$ as the input to the model $f(X)$. This means the $f(X)$ would have the form: 
+
+\begin{equation}
+  f(X) = X\beta_1 + \beta_0
+  \label{eq:fx}
+\end{equation}
+
+where \( \beta_0 \) is the intercept and \( \beta_1 \) is the slope of the line defined by $f(X)$.
+
+From the lecture, we know that the logistic function is defined as:
+
+\begin{equation}
+  p(Y = 1 | X) = \frac{e^{f(X)}}{1 + e^{f(X)}}
+  \label{eq:logistic_regression}
+\end{equation}
+
+Substituting Equation~\ref{eq:fx} in Equation~\ref{eq:logistic_regression}, we get the following:
+\begin{equation}
+  p(Y = 1 | X) = \frac{e^{X\beta_1 + \beta_0}}{1 + e^{X\beta_1 + \beta_0}}
+  \label{eq:final_logistic_regression}
+\end{equation}
+Equation~\ref{eq:final_logistic_regression} represents the logistic regression function given a single input $X \in \mathbb{R}$. The output of this function lies within [0, 1]. More formally, $p(Y = 1 | X) \in [0, 1] \text{ for all} \, X$. As a consequence, the output of the logistic regression function can be interpreted as the probability of an input $X$ belonging to class $1$.
+
+\textbf{b)} In the context of logistic regression, the likelihood function is defined as the probability of observing the output $y_1, \hdots, y_n$ given the input $x_1, \hdots, x_n$. The likelihood function is given by:
+
+\begin{equation}
+  p(y_1, \hdots, y_n | x_1, \hdots, x_n) = \prod_{i:y_i = 1}^{} p(y_i = 1 | x_i)\prod_{i:y_i = 0}^{} (1 - p(y_i = 1 | x_i))
+  \label{eq:likelihood}
+\end{equation}
+
+Log-likelihood is essentialy the logarithm of the likelihood function. It is used to simplify the optimization problem. The log-likelihood function is given by:
+
+\begin{equation}
+  \begin{aligned}
+    \log(p(y_1, \hdots, y_n | x_1, \hdots, x_n)) &= \log\left[\prod_{i:y_i = 1}^{} p(y_i = 1 | x_i)\prod_{i:y_i = 0}^{} (1 - p(y_i = 1 | x_i))\right] \\
+  \end{aligned}
+  \label{eq:log_likelihood}
+\end{equation}
+
+Given that $\log(xy) = \log(x) + \log(y)$, we can rewrite Equation~\ref{eq:log_likelihood} as:
+\begin{equation}
+  \begin{aligned}
+    \log(p(y_1, \hdots, y_n | x_1, \hdots, x_n)) &= \log\left[\prod_{i:y_i = 1}^{} p(y_i = 1 | x_i)\right] + \log\left[\prod_{i:y_i = 0}^{} (1 - p(y_i = 1 | x_i))\right] \\
+    &= \sum_{i:y_i = 1}^{}\log(p(y_i = 1 | x_i)) + \sum_{i:y_i = 0}^{}\log(1 - p(y_i = 1 | x_i)) \\
+  \end{aligned}
+  \label{eq:sum_log_likelihood}
+\end{equation}
+
+Equation~\ref{eq:sum_log_likelihood} expresses the log-likelihood function. To tailor it for logistic regression, we just need to substitute $p(y_i = 1 | x_i) = \frac{e^{x_i\beta_1 + \beta_0}}{1 + e^{x_i\beta_1 + \beta_0}}$. Doing so, we get the following result:
+
+\begin{equation}
+  \begin{aligned}
+    \log(p(y_1, \hdots, y_n | x_1, \hdots, x_n)) &= \sum_{i:y_i = 1}^{}\log(\frac{e^{x_i\beta_1 + \beta_0}}{1 + e^{x_i\beta_1 + \beta_0}}) + \sum_{i:y_i = 0}^{}\log(1 - \frac{e^{x_i\beta_1 + \beta_0}}{1 + e^{x_i\beta_1 + \beta_0}}) \\
+  \end{aligned}
+  \label{eq:final_sum_log_likelihood}
+\end{equation}
+
+The goal is to maximize the log-likelihood function. However, this problem doesn't have a closed-form solution. Therefore, we have to rely on optimization methods such as the Newton-Raphson method to estimate the parameters $\beta_0$ and $\beta_1$.
+
+\textbf{c)} Frist we will compare the two types of classifiers in terms of the output. Given an input $x$, the discriminative classifier estimates $\hat{g(x)}$ of class $g(x)$, while the generative classifier outputs a probability distribution ${p_g(x) | g \in G}$, where $p_g(x)$ is the probability that $x$ belongs to class $g$.
+
+Next, we will compare the two types of classifiers in terms of the loss function. The discriminative classifier measures the deviation between the estimates and the output, while the generative classifier measures the (log-)likelihood of the estimator generating the output $\sum_{i=1}^{N} \log p_{g_i}(x)$.
+
+Finally, we will compare the two types of classifiers in terms of optimization. The discriminative classifier aims to minimize the loss function, while the generative classifier aims to maximize the likelihood of the data.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \bibliographystyle{unsrt}
+% \bibliography{references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

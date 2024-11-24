@@ -1,0 +1,25 @@
+59_Duka.txt
+
+
+## Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+*.blg
+*.bbl
+*.synctex.gz
+*.ind
+*.idx
+*.ilg
+*.ldf
+*.xmpi
+*.fdb_latexmk

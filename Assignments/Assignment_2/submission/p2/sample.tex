@@ -1,0 +1,105 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+
+\usepackage[preprint,nonatbib]{neurips_2024}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{caption}  % To add a caption
+\usepackage{tcolorbox} % For creating colored or framed boxes
+\usepackage{subcaption}
+
+\pgfplotsset{compat=1.18}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Assignment \#2\\
+  \vspace{2mm}
+  \small{Elements of Machine Learning}
+  \\
+  \vspace{2mm}
+  \small{Saarland University -- Winter Semester 2024/25}
+}
+
+\author{%
+\textbf{Rabin Adhikari} \\
+  7072310 \\
+  \texttt{raad00002@stud.uni-saarland.de} \\
+  \and
+  \textbf{Dhimitrios Duka} \\
+ 7059153 \\
+  \texttt{dhdu00001@stud.uni-saarland.de} \\
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 2 (Logistic Regression)}
+\subsection*{a)}
+In order to derive the optimal coeffiecients, we will have to take the derivative of the loss function $l(x)$ w.r.t each $\beta_j$. First, we will derive a generic expression for camputing the gradient w.r.t $\beta_j$.
+
+\begin{equation}
+  \begin{aligned}
+    \frac{\partial}{\partial \beta_j}\ell(\beta) &= \frac{\partial}{\partial \beta_j}\sum_{i=1}^{n} \left[ y_i \log p(x_i; \beta) + (1 - y_i) \log \left(1 - p(x_i; \beta) \right) \right] \\
+    &= \sum_{i=1}^{n} \left[ y_i \frac{\partial}{\partial \beta_j} \log p(x_i; \beta) + (1 - y_i) \frac{\partial}{\partial \beta_j} \log \left(1 - p(x_i; \beta) \right) \right] \\
+    &= \sum_{i=1}^{n} \left[ y_i \frac{\frac{\partial}{\partial \beta_j} p(x_i; \beta)}{p(x_i; \beta)} + (1 - y_i) \frac{\frac{\partial}{\partial \beta_j}(1 - p(x_i; \beta))}{(1 - p(x_i; \beta))} \right] \\
+    &= \sum_{i=1}^{n} \left[ y_i \frac{\frac{\partial}{\partial \beta_j} p(x_i; \beta)}{p(x_i; \beta)} - (1 - y_i) \frac{\frac{\partial}{\partial \beta_j}p(x_i; \beta)}{(1 - p(x_i; \beta))} \right] \\
+    &= 0
+  \end{aligned}
+\end{equation}
+
+\subsection*{b)}
+
+
+\subsection*{c) i)} 
+Applying the formula for a multivariate logistic regression, we get the following outputs:
+
+\begin{table}[h!]
+  \centering
+  \caption{
+    Data for x1, x2, and predicted values.
+  }
+  \begin{tabular}{ccccc}
+    \toprule
+    \textbf{x1} & \textbf{x2} & \textbf{$p(x_i, \beta)$} & \textbf{class} & \textbf{correct}\\
+    \midrule
+    1.0 & 2.0 & 0.182 & 0 & 0\\
+    2.0 & 3.0 & 0.378 & 0 & 0\\
+    3.0 & 4.0 & 0.622 & 1 & 0\\
+    4.0 & 5.0 & 0.818 & 1 & 1\\
+    5.0 & 6.0 & 0.924 & 1 & 1\\
+    6.0 & 7.0 & 0.971 & 1 & 1\\
+    7.0 & 8.0 & 0.989 & 1 & 1\\
+    8.0 & 9.0 & 0.996 & 1 & 1\\
+    \bottomrule
+  \end{tabular}
+  \label{tab:x1_x2_pred_data}
+\end{table}
+
+\subsection*{c) i)} 
+Based on the given theshold, we can construct the following table. we see that the model missclassified only one point.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \bibliographystyle{unsrt}
+% \bibliography{references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

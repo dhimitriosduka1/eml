@@ -1,0 +1,145 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+
+\usepackage[preprint,nonatbib]{neurips_2024}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{caption}  % To add a caption
+\usepackage{tcolorbox} % For creating colored or framed boxes
+\usepackage{subcaption}
+
+\pgfplotsset{compat=1.18}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Assignment \#2\\
+  \vspace{2mm}
+  \small{Elements of Machine Learning}
+  \\
+  \vspace{2mm}
+  \small{Saarland University -- Winter Semester 2024/25}
+}
+
+\author{%
+\textbf{Rabin Adhikari} \\
+  7072310 \\
+  \texttt{raad00002@stud.uni-saarland.de} \\
+  \and
+  \textbf{Dhimitrios Duka} \\
+ 7059153 \\
+  \texttt{dhdu00001@stud.uni-saarland.de} \\
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Problem 3 (Linear \& Quadratic Discriminate Analysis)}
+\subsection{a)} Let's first define the datapoints for each of the two classes.
+
+\begin{table}[h!]
+  \centering
+  \caption{
+    Data for \(x_1\), \(x_2\), and their respective classes.
+  }
+  \begin{tabular}{ccc}
+    \toprule
+    \textbf{\(x_1\)} & \textbf{\(x_2\)} & \textbf{Class} \\
+    \midrule
+    1 & 1 & 0 \\
+    2 & 1 & 0 \\
+    3 & 2 & 0 \\
+    2 & 3 & 0 \\
+    1 & 3 & 0 \\
+    \midrule
+    7 & 1 & 1 \\
+    5 & 2 & 1 \\
+    6 & 4 & 1 \\
+    4 & 5 & 1 \\
+    6 & 5 & 1 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:x1_x2_classes}
+\end{table}
+
+First, let's calculate the mean of each class. The mean of the first class $\mu_0$ would be:
+
+\begin{equation}
+  \mu_0 = \frac{1}{5} \sum_{i=1}^{5} X_i = \frac{1}{5} \left( \begin{bmatrix} 1 \\ 1 \end{bmatrix} + \begin{bmatrix} 2 \\ 1 \end{bmatrix} + \begin{bmatrix} 3 \\ 2 \end{bmatrix} + \begin{bmatrix} 2 \\ 3 \end{bmatrix} + \begin{bmatrix} 1 \\ 3 \end{bmatrix} \right) = \begin{bmatrix} 1.8 \\ 2 \end{bmatrix}
+\end{equation}
+
+Similarly, the mean of the second class $\mu_1$ would be:
+
+\begin{equation}
+  \mu_1 = \frac{1}{5} \sum_{i=6}^{10} X_i = \frac{1}{5} \left( \begin{bmatrix} 7 \\ 1 \end{bmatrix} + \begin{bmatrix} 5 \\ 2 \end{bmatrix} + \begin{bmatrix} 6 \\ 4 \end{bmatrix} + \begin{bmatrix} 4 \\ 5 \end{bmatrix} + \begin{bmatrix} 6 \\ 5 \end{bmatrix} \right) = \begin{bmatrix} 5.6 \\ 3.4 \end{bmatrix}
+\end{equation}
+
+The covariance matrix for two predictors $x_1$ and $x_2$ and a class $k$ is defined as follows:
+
+\begin{equation}
+  \Sigma_k = \begin{bmatrix}
+    var(x^k_1) & cov(x^k_1, x^k_2) \\
+    cov(x^k_1, x^k_2) & var(x^k_2)
+  \end{bmatrix}
+\end{equation}
+
+First, let's calculate the covariance matrix for class $k = 0$. The covariance matrix for class $k = 0$ would be:
+
+\begin{equation}
+  \Sigma_0 = \begin{bmatrix}
+    \mathbb{E}[(x^0_1)^2] - \mathbb{E}[x^0_1]^2 & \mathbb{E}[x^0_1x^0_2] - \mathbb{E}[x^0_1]\mathbb{E}[x^0_2] \\
+    \\
+    \mathbb{E}[x^0_1x^0_2] - \mathbb{E}[x^0_1]\mathbb{E}[x^0_2] & \mathbb{E}[(x^0_2)^2] - \mathbb{E}[x^0_2]^2
+  \end{bmatrix}
+\end{equation}
+
+Calculating the expectations and substituting the values, we get:
+\begin{equation}
+  \Sigma_0 = \begin{bmatrix}
+    0.7 & 0 \\
+    0 & 1
+  \end{bmatrix}
+\end{equation}
+
+Following a similiar aproach, we can calculate the covariance matrix for class $k = 1$. The reuslting covariance matrix would be:
+
+\begin{equation}
+  \Sigma_1 = \begin{bmatrix}
+    1.3 & -1.05 \\
+    -1.05 & 3.3
+  \end{bmatrix}
+\end{equation}
+
+NOTE: Fix the computations for the covariance matrices.
+
+\subsection{b)}
+In order to determin in which class the new data point is going to be classified, we need to calculate the discriminant function for each class. The discriminant function for class $k$ is defined as follows:
+
+\begin{equation}
+  \delta_k(x) = x^T \Sigma_k^{-1}\mu_k - \frac{1}{2}\mu_k \Sigma_k^{-1}\mu_k + \log(\pi_k)
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \bibliographystyle{unsrt}
+% \bibliography{references} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
