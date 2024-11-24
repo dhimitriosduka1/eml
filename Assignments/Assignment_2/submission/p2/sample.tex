@@ -46,8 +46,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Problem 2 (Logistic Regression)}
-\subsection*{a)}
-In order to derive the optimal coeffiecients, we will have to take the derivative of the loss function $l(x)$ w.r.t each $\beta_j$. First, we will derive a generic expression for camputing the gradient w.r.t $\beta_j$.
+\textbf{a)} Deriving the gradient of the logistic regression loss function w.r.t. the coefficients $\beta$ can be done as follows:
 
 \begin{equation}
   \begin{aligned}
@@ -55,24 +54,51 @@ In order to derive the optimal coeffiecients, we will have to take the derivativ
     &= \sum_{i=1}^{n} \left[ y_i \frac{\partial}{\partial \beta_j} \log p(x_i; \beta) + (1 - y_i) \frac{\partial}{\partial \beta_j} \log \left(1 - p(x_i; \beta) \right) \right] \\
     &= \sum_{i=1}^{n} \left[ y_i \frac{\frac{\partial}{\partial \beta_j} p(x_i; \beta)}{p(x_i; \beta)} + (1 - y_i) \frac{\frac{\partial}{\partial \beta_j}(1 - p(x_i; \beta))}{(1 - p(x_i; \beta))} \right] \\
     &= \sum_{i=1}^{n} \left[ y_i \frac{\frac{\partial}{\partial \beta_j} p(x_i; \beta)}{p(x_i; \beta)} - (1 - y_i) \frac{\frac{\partial}{\partial \beta_j}p(x_i; \beta)}{(1 - p(x_i; \beta))} \right] \\
-    &= 0
+    &= \sum_{i=1}^{n} \left[  \frac{y_i}{p(x_i; \beta)}\frac{\partial}{\partial \beta_j} p(x_i; \beta) -  \frac{1 - y_i}{(1 - p(x_i; \beta))}\frac{\partial}{\partial \beta_j}p(x_i; \beta) \right] \\
   \end{aligned}
 \end{equation}
 
-\subsection*{b)}
+\textbf{b)}
+During the training process, we aim to minimize the log loss function. The log loss function is defined as follows:
+
+\begin{equation}
+  \ell(\beta) = -\frac{1}{n} \sum_{i=1}^{n} \left[ y_i \log p(x_i; \beta) + (1 - y_i) \log \left(1 - p(x_i; \beta) \right) \right]
+\end{equation}
+
+To better understand how the log loss function beahves, we will examine two distinct cases. In the first case, we will consider the case where the true label is $y_i = 1$. In the second case, we will consider the case where the true label is $y_i = 0$.
+
+\textbf{Case 1:} $y_i = 1$
+
+In this case, the log loss function simplifies to:
+
+\begin{equation}
+  \ell(\beta) = -\frac{1}{n} \sum_{i=1}^{n} \log p(x_i; \beta)
+\end{equation}
+
+In order for this term to be minimized, we need the values of $p(x_i; \beta)$ to be as close to 1 as possible. This means that the model should be confident that the input $x_i$ belongs to class 1, thus aligning with the true label $y_i = 1$.
 
 
-\subsection*{c) i)} 
-Applying the formula for a multivariate logistic regression, we get the following outputs:
+\textbf{Case 2:} $y_i = 0$
+
+In this case, the log loss function simplifies to:
+
+\begin{equation}
+  \ell(\beta) = -\frac{1}{n} \sum_{i=1}^{n} \log \left(1 - p(x_i; \beta) \right)
+\end{equation}
+
+In order for this term to be minimized, we need the values of $p(x_i; \beta)$ to be as close to 0 as possible. This means that the model should be confident that the input $x_i$ belongs to class 0, thus aligning with the true label $y_i = 0$.
+
+
+\textbf{c) i)} The outputs from the logistic regression model for the given data points are summarized in Table \ref{tab:x1_x2_pred_data}.
 
 \begin{table}[h!]
   \centering
   \caption{
-    Data for x1, x2, and predicted values.
+    Predictions for the given data points using the logistic regression model. GT: Ground Truth.
   }
   \begin{tabular}{ccccc}
     \toprule
-    \textbf{x1} & \textbf{x2} & \textbf{$p(x_i, \beta)$} & \textbf{class} & \textbf{correct}\\
+    \textbf{$x_1$} & \textbf{$x_2$} & \textbf{$p(x_i, \beta)$} & \textbf{Prediction} & \textbf{GT}\\
     \midrule
     1.0 & 2.0 & 0.182 & 0 & 0\\
     2.0 & 3.0 & 0.378 & 0 & 0\\
@@ -87,8 +113,7 @@ Applying the formula for a multivariate logistic regression, we get the followin
   \label{tab:x1_x2_pred_data}
 \end{table}
 
-\subsection*{c) i)} 
-Based on the given theshold, we can construct the following table. we see that the model missclassified only one point.
+\textbf{c) ii)} Given the threshold of $0.5$, the predictions for the given data points are summarized in Table \ref{tab:x1_x2_pred_data}. The model missclassifies only one data point.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
