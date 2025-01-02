@@ -1,0 +1,256 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{article}
+
+\usepackage[preprint,nonatbib]{neurips_2024}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{caption}  % To add a caption
+\usepackage{tcolorbox} % For creating colored or framed boxes
+\usepackage{subcaption}
+\usepackage[noabbrev,capitalise]{cleveref}
+
+
+\pgfplotsset{compat=1.18}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Assignment \#3\\
+  \vspace{2mm}
+  \small{Elements of Machine Learning}
+  \\
+  \vspace{2mm}
+  \small{Saarland University -- Winter Semester 2024/25}
+}
+
+\author{%
+\textbf{Rabin Adhikari} \\
+  7072310 \\
+  \texttt{raad00002@stud.uni-saarland.de} \\
+  \and
+  \textbf{Dhimitrios Duka} \\
+ 7059153 \\
+  \texttt{dhdu00001@stud.uni-saarland.de} \\
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setcounter{section}{2}
+\section{Problem 3 (Beyond linearity: Polynomial and Splines)}
+
+\subsection{Cubic Regression Spline with One Knot}
+Cubic regression spline with one knot at $\xi$ can be obtained using a basis of the form $x, x^2, x^3, \left(x - \xi\right)^3_+$, where $\left(x - \xi\right)^3_+ = \left(x - \xi\right)^3$ if $x > \xi$ and equals 0 otherwise.
+We can show that a function of the following form is indeed a cubic regression spline, regardless of the values of $\beta_0, \beta_1, \beta_2, \beta_3, \beta_4$.
+\[
+    f\left(x\right) = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \beta_4 \left(x - \xi\right)^3_+
+\]
+
+\subsubsection{Find a cubic polynomial $f_1\left(x\right)$}
+
+\answer
+Find a cubic polynomial 
+\[
+    f_1\left(x\right) = a_1 + b_1 x + c_1 x^2 + d_1 x^3
+\]
+such that $f\left(x\right) = f_1\left(x\right)$ for all $x \leq \xi$.
+Express $a_1, b_1, c_1, d_1$ in terms of $\beta_0, \beta_1, \beta_2, \beta_3, \beta_4$.
+
+\answer
+When $x \leq \xi$, $\left(x - \xi\right)^3_+ = 0$, so $f\left(x\right)$ can be written as follows.
+\[
+    f\left(x\right) = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3
+\]
+
+Comparing the above coefficients with that of $f_1\left(x\right)$, we can write the following.
+\begin{gather*}
+    a_1 = \beta_0 \\
+    b_1 = \beta_1 \\
+    c_1 = \beta_2 \\
+    d_1 = \beta_3 \\
+\end{gather*}
+
+\subsubsection{Find a cubic polynomial $f_2\left(x\right)$}
+
+\question
+Find a cubic polynomial 
+\[
+f_2\left(x\right) = a_2 + b_2 x + c_2 x^2 + d_2 x^3
+\]
+such that $f\left(x\right) = f_2\left(x\right)$ for all $x > \xi$.
+Express $a_2, b_2, c_2, d_2$ in terms of $\beta_0, \beta_1, \beta_2, \beta_3, \beta_4$.
+We have now established that $f\left(x\right)$ is a piecewise polynomial.
+
+\answer
+When $x > \xi$, $\left(x - \xi\right)^3_+ = \left(x - \xi\right)^3$, so $f\left(x\right)$ can be written as follows.
+\[
+    f\left(x\right) = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \beta_4 \left(x - \xi\right)^3
+\]
+
+Also, we know $\left(x - \xi\right)^3 = x^3 - 3 x^2 \xi + 3 x \xi^2 - \xi^3$.
+So, the above equation can be expanded as follows.
+\begin{equation*}
+    \begin{split}
+        f\left(x\right) &= \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \beta_4 \left( x^3 - 3 x^2 \xi + 3 x \xi^2 - \xi^3 \right) \\
+        &= \beta_0 - \beta_4 \xi^3  + \left(\beta_1 + 3 \beta_4 \xi^2 \right) x + \left(\beta_2 - 3 \beta_4 \xi \right) x^2 + \left(\beta_3 + \beta_4\right) x^3\\
+    \end{split}
+\end{equation*}
+
+Comparing the above coefficients with that of $f_2\left(x\right)$, we can write the following.
+\begin{gather*}
+    a_2 = \beta_0 - \beta_4 \xi^3 \\
+    b_2 = \beta_1 + 3 \beta_4 \xi^2 \\
+    c_2 = \beta_2 - 3 \beta_4 \xi\\
+    d_2 = \beta_3 + \beta_4\\
+\end{gather*}
+
+\subsubsection{Continuity at $\xi$}
+
+\question
+Show that $f_1\left(\xi\right) = f_2\left(\xi\right)$.
+That is, $f\left(x\right)$ is continuous at $\xi$.
+
+\answer
+First, $f_1\left(\xi\right)$ can be written as follows.
+\[
+    f_1\left(x\right) = \beta_0 + \beta_1 \xi + \beta_2 \xi^2 + \beta_3 \xi^3
+\]
+
+Now, $f_2\left(\xi\right)$ can be written as follows.
+\begin{equation*}
+    \begin{split}
+        f_2\left(x\right) &= \beta_0 - \beta_4 \xi^3  + \left(\beta_1 + 3 \beta_4 \xi^2 \right) \xi + \left(\beta_2 - 3 \beta_4 \xi \right) \xi^2 + \left(\beta_3 + \beta_4\right) \xi^3 \\
+        &= \beta_0 - \beta_4 \xi^3  + \beta_1 \xi + 3 \beta_4 \xi^3 + \beta_2 \xi^2 - 3 \beta_4 \xi^3 + \beta_3 \xi^3 + \beta_4 \xi^3 \\
+        &= \beta_0 + \beta_1 \xi + \beta_2 \xi^2 + \beta_3 \xi^3 \\
+        &= f_1\left(x\right)
+    \end{split}
+\end{equation*}
+
+\subsubsection{First Derivative Continuity at $\xi$}
+\question
+Show that $f_1'\left(\xi\right) = f_2'\left(\xi\right)$.
+That is, $f'\left(x\right)$ is continuous at $\xi$.
+
+\answer
+First, $f_1'\left(x\right)$ can be written as follows.
+\[
+    f_1'\left(x\right) = \beta_1 + 2 \beta_2 x + 3 \beta_3 x^2
+\]
+
+Therefore, $f_1'\left(\xi\right)$ is,
+\[
+    f_1'\left(x\right) = \beta_1 + 2 \beta_2 \xi + 3 \beta_3 \xi^2
+\]
+
+Also, $f_2'\left(x\right)$ can be written as follows.
+\[
+    f_2'\left(x\right) = \beta_1 + 3 \beta_4 \xi^2 + 2 \left(\beta_2 - 3 \beta_4 \xi \right) x + 3 \left(\beta_3 + \beta_4\right) x^2
+\]
+
+Therefore, $f_2'\left(\xi\right)$ is,
+\begin{equation*}
+    \begin{split}
+        f_2'\left(x\right) &= \beta_1 + 3 \beta_4 \xi^2 + 2 \left(\beta_2 - 3 \beta_4 \xi \right) \xi + 3 \left(\beta_3 + \beta_4\right) \xi^2 \\
+        &= \beta_1 + 3 \beta_4 \xi^2 + 2 \beta_2 \xi - 6 \beta_4 \xi^2 + 3 \beta_3 \xi^2 + 3 \beta_4 \xi^2 \\
+        &= \beta_1 + 2 \beta_2 \xi + 3 \beta_3 \xi^2 \\
+        &= f_1'\left(x\right)
+    \end{split}
+\end{equation*}
+
+\subsubsection{Second Derivative Continuity at $\xi$}
+
+\question
+Show that $f_1''\left(\xi\right) = f_2''\left(\xi\right)$.
+That is, $f''\left(x\right)$ is continuous at $\xi$.
+Therefore, $f\left(x\right)$ is indeed a cubic spline.
+
+\answer
+First, $f_1''\left(x\right)$ can be written as follows.
+\[
+    f_1''\left(x\right) = 2 \beta_2 + 6 \beta_3 x
+\]
+
+Therefore, $f_1'\left(\xi\right)$ is,
+\[
+    f_1''\left(x\right) = 2 \beta_2 + 6 \beta_3 \xi
+\]
+
+Also, $f_2''\left(x\right)$ can be written as follows.
+\[
+    f_2''\left(x\right) = 2 \left(\beta_2 - 3 \beta_4 \xi \right) + 6 \left(\beta_3 + \beta_4\right) x
+\]
+
+Therefore, $f_2''\left(\xi\right)$ is,
+\begin{equation*}
+    \begin{split}
+        f_2''\left(x\right) &= 2 \left(\beta_2 - 3 \beta_4 \xi \right) + 6 \left(\beta_3 + \beta_4\right) \xi \\
+        &= 2 \beta_2 - 6 \beta_4 \xi + 6 \beta_3 \xi + 6 \beta_4 \xi \\
+        &= 2 \beta_2 + 6 \beta_3 \xi \\
+        &= f_1''\left(x\right)
+    \end{split}
+\end{equation*}
+
+\subsection{Comparing Smoothing Splines}
+
+Consider two curves, $\hat{g}_1$ and $\hat{g}_2$, defined by
+\begin{gather*}
+    \hat{g}_1 = \arg \min_g \left( \sum_{i=1}^n (y_i - g(x_i))^2 + \lambda \int \left[ g^{(3)}(x) \right]^2 dx \right) \\
+    \hat{g}_2 = \arg \min_g \left( \sum_{i=1}^n (y_i - g(x_i))^2 + \lambda \int \left[ g^{(4)}(x) \right]^2 dx \right)
+\end{gather*}
+where $g^{(m)}$ represents the $m$-th derivative of $g$.
+
+\subsubsection{Training RSS as $\lambda \to \infty$}
+
+\question
+As $\lambda \to \infty$, will $\hat{g}_1$ or $\hat{g}_2$ have the smaller training RSS?
+
+\answer
+When $\lambda \to \infty$, the minimization would want to make the second term minimum. 
+The minimum value attainable by the term is zero and the value of $g^{(m)}$ would be zero for $(m-1)^{th}$ polynomial.
+So, when $\lambda \to \infty$, $\hat{g}_1$ would be a quadratic polynomial and $\hat{g}_2$ would be the cubic one.
+Since $\hat{g}_2$ has more capacity than $\hat{g}_1$, there is a high chance that $\hat{g}_2$ would have a smaller training RSS.
+
+\subsubsection{Test RSS as $\lambda \to \infty$}
+
+\question
+As $\lambda \to \infty$, will $\hat{g}_1$ or $\hat{g}_2$ have the smaller test RSS?
+
+\answer
+Since $\hat{g}_2$ is a quadratic polynomial and $\hat{g}_1$ is a cubic polynomial, there may be some cases where $\hat{g}_2$ is overfitting the data and $\hat{g}_1$ is not.
+However, we can't be sure until we have some knowledge about that underlying function. In a nutshell, the RSS in the test set depends on the underlying function.
+
+\subsubsection{RSS for $\lambda = 0$}
+
+\question
+For $\lambda = 0$, will $\hat{g}_1$ or $\hat{g}_2$ have the smaller training RSS and test RSS?
+
+\answer
+When $\lambda = 0$, both the equations just minimize the RSS on the training set resulting in the same model since the nature of the curves is identical.
+Hence, the test RSS would also be the same.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \bibliographystyle{unsrt}
+% \bibliography{references}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
