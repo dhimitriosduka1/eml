@@ -24,7 +24,7 @@
 \pgfplotsset{compat=1.18}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Assignment \#3\\
+\title{Assignment \#4\\
   \vspace{2mm}
   \small{Elements of Machine Learning}
   \\
@@ -49,12 +49,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \setcounter{section}{1}
 \section{Problem 2 (Hierarchical clustering and dissimilarity)}
-\subsection{}
-Out of the three mentioned clustering methods, only $k$-means requires the coordinates of the elements being clustered. This is due to the fact that at each iteration of the algorithm, $k$-means needs to find the mean of all datapoints in a given cluster $C_i$. In contrast, both $k$-medoids and agglomerative clustering can work with just the dissimilarity matrix, as they don't create new points, such as the mean of the cluster, or perform coordinate-based calculations. $k$-medoids selects actual data points as cluster centers and uses only pairwise distances for cluster assignments, while agglomerative clustering builds a hierarchy by progressively merging clusters based solely on distances between existing points. For $k$-medoids and agglomerative clustering, coordinates are more of a proxy to calculating the dissimilarity scores. Therefore, having direct access to the dissimilarity scores renders the coordinates useless.
+\subsection{To perform k-means clustering, k-medoids, or agglomerative clustering, is it necessary to know the coordinates of the elements being clustered, or is it sufficient to have only their dissimilarity matrix? Explain your answer in detail.}
+Out of the three mentioned clustering methods, only $k$-means requires the coordinates of the elements being clustered. This is because, at each iteration of the algorithm, $k$-means needs to find the mean of all data points in a given cluster $C_i$. In contrast, both $k$-medoids and agglomerative clustering can work with just the dissimilarity matrix, as they don't create new points, such as the mean of the cluster, or perform coordinate-based calculations. $k$-medoids select actual data points as cluster centers and use only pairwise distances for cluster assignments, while agglomerative clustering builds a hierarchy by progressively merging clusters based solely on distances between existing points. For $k$-medoids and agglomerative clustering, coordinates are more of a proxy for calculating the dissimilarity scores. Therefore, having direct access to the dissimilarity scores renders the coordinates useless.
 
-\subsection{}
+\subsection{The hierarchical clustering algorithm has already identified one cluster, and the dissimilarity matrix below represents the pairwise dissimilarities among the elements...}
 \subsubsection{Complete linkage}
-First, we will start by finding the two most similiar clusters. These clusters would be the ones who would end up merging. From the given dissimilarity matrix, we can conclude that the two clusters with the minimum dissimilarity are cluster $C$ and $D$. So, these two clusers would merge and form a new cluster $[C, D]$. Keeping in mind how the complete linkage method works, we write down the updated similiarity matrix:
+First, we will start by finding the two most similar clusters. From the given dissimilarity matrix, we can conclude that the two clusters with the minimum dissimilarity score are cluster $C$ and $D$. These two clusters would merge and form a new cluster $[C, D]$. Keeping in mind how the complete linkage method works, we write down the updated similarity matrix:
 
 \begin{center}
     \begin{tabular}{c|ccc}
@@ -67,7 +67,7 @@ First, we will start by finding the two most similiar clusters. These clusters w
 \end{center}
 
 \subsubsection{Single linkage}
-For the single linkage method, we will follow a similiar approach to the Complete linkage method. First, we will merge the two most similiar clusters, and then we will update the similiarity matrix. As in the previous exercise, we will merge clusters $C$ and $D$. However, while updating the similiarity matrix, we will choose the minimum distance between clusters instead of the maximum. The resulting similiarity matrix is given in the table below:
+For the single linkage method, we will follow a similar approach to the Complete linkage method. First, we will merge the two most similar clusters, and then we will update the similarity matrix. As in the previous exercise, we will merge clusters $C$ and $D$. However, while updating the similarity matrix, we will choose the minimum distance between clusters instead of the maximum. The resulting similarity matrix is given in the table below:
 
 \begin{center}
     \begin{tabular}{c|ccc}
@@ -80,7 +80,7 @@ For the single linkage method, we will follow a similiar approach to the Complet
 \end{center}
 
 \subsubsection{}
-The final dendogram is shown in Figure\ref{fig:dendogram}
+The final dendogram is shown in Figure\ref{fig:dendogram}. First, clusters $\{A\}$ and $\{B\}$ are merged. Next, clusters $\{C\}$ and $\{D\}$. Next clusters $\{A, B\}$ and $\{C, D\}$ are merged. And finally, clusters $\{A, B, C, D\}$ and $\{E\}$ are merged.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth]{dendogram.png}
