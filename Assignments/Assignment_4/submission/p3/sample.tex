@@ -52,8 +52,7 @@
 \section{Problem 3 (Dimensionality Reduction)}
 \subsection{What information does the first principal component capture in terms of the data variance and the
 data explaining?}
-
-The first principal component is the direction which captures the most of the variance of the data as well as at the same time, it's the closes line to the data.
+The first principal component is the direction in which the data varies the most. In other words, it's the direction that captures the most variance in the data. Furthermore, assuming that the underlying data is linearly distributed, the first principal component represents the closest line to the data.
 
 \subsection{Calculate the first principal component.}
 We can imagine the provided data as a matrix where each row represents a data point and each column represents a feature.
@@ -71,31 +70,95 @@ First, we have to normalize the data. To perform normalization, first we compute
     \begin{aligned}
         \mu_1 &= \frac{1 + 2 + 3}{3} = 2 \\
         \mu_2 &= \frac{1 + 2 + 3}{3} = 2 \\
-        \sigma_1 &= \sqrt{\frac{1}{3} (1 + 0 + 1)} = 0.8164 \\
-        \sigma_2 &= \sqrt{\frac{1}{3} (1 + 0 + 1)} = 0.8164
+        \sigma_1 &= \sqrt{\frac{1}{2} (1 + 0 + 1)} = 1 \\
+        \sigma_2 &= \sqrt{\frac{1}{2} (1 + 0 + 1)} = 1
     \end{aligned}
 \end{equation}
 
 Applying the normalization formula, we get the following matrix:
 
-\[
+\[ X = 
     \begin{pmatrix}
-        -1.225 & -1.225 \\
+        -1 & -1 \\
         0 & 0 \\
-        1.225 & 1.225
+        1 & 1
     \end{pmatrix}
 \]
 
+Next, we compute the covariance matrix.
+
+\begin{equation}
+    \begin{aligned}
+        \Sigma &= \frac{1}{n - 1} X^TX \\
+               &= \frac{1}{2} 
+                \begin{pmatrix}
+                    -1 & -1 \\
+                    0 & 0 \\
+                    1 & 1
+                \end{pmatrix}^T
+                \begin{pmatrix}
+                    -1 & -1 \\
+                    0 & 0 \\
+                    1 & 1
+                \end{pmatrix} \\
+                & = \begin{pmatrix}
+                    1 & 1 \\
+                    1 & 1 \\
+                \end{pmatrix}   
+    \end{aligned}
+\end{equation}
+
+Next, we have to compute the eigenvectors and eigenvalues of the covariance matrix.
+
+\[
+    det\begin{pmatrix}
+        1 -  \lambda & 1 \\
+        1 & 1 - \lambda
+    \end{pmatrix}
+    = 0
+\]
+
+\begin{equation}
+    \begin{aligned}
+        (1 -  \lambda)^2 - 1 = 0
+    \end{aligned}
+\end{equation}
+
+Solving the equation above, we get $\lambda_1 = 0$ and $\lambda_2= 2$. This means the the eigenvector related to $lambda_1$ doesn't capture any variance. Therefore, we are interested in the eigenvector associated with $\lambda_2$.
+
+\begin{eqnarray}
+    \begin{aligned}
+        (\Sigma - 2I)v &= 0 \\
+        \begin{pmatrix}
+            -1 & 1 \\
+            1 & -1
+        \end{pmatrix}
+        \begin{pmatrix}
+            v_1 \\
+            v_2
+        \end{pmatrix}
+        &= 0 
+    \end{aligned}
+\end{eqnarray}
+
+Solving the equation above, we get the following eigenvector: $v_1 = \begin{pmatrix}
+    1 \\
+    1
+\end{pmatrix}$. Normalizing $v_1$, we get: $v_1 = \frac{1}{\sqrt{2}} \begin{pmatrix}
+    1 \\
+    1
+\end{pmatrix}$.
+
 \subsection{Can PCA be used to reduce the dimensionality of a highly nonlinear dataset? Explain.}
-PCA isn't a great choice when it comes to reducing dimensionality of highly nonlinear datasets. PCA aims to reduce dimensionality by identifying the direction which captures the most variance in the data. However, if the data is highly nonlinear, PCA may not capture the true underlying structure. For example, if we have a spiral dataset, all of the points would end up projected on a single line, and the original structure of the data would not be there anymore.
+PCA can be applied to reduce the dimensionality of a highly nonlinear dataset, but the results are often unsatisfactory. This is because PCA is fundamentally a linear technique. Its goal is to identify linear combinations of features that capture the maximum variance in the data by finding orthogonal directions that represent the directions with the highest variance. However, for nonlinear datasets, PCA struggles to capture the complex relationships between features, leading to the loss of important information and failing to preserve the dataset's underlying structure. A simple example is the spiral dataset. Suppose we have a spiral dataset in 2D and apply PCA to reduce it to 1D. The data would end up being projected into a single line, therefore losing its initial structure.
+
 
 \subsection{When might be sensible to chain two different dimensionality reduction algorithms? You can support your answer with an example.}
-
-
+Applying t-SNE to a large dataset is computationally expensive as it computes pairwise conditional probabilities for each data point. The solution to this problem is to use a combination of t-SNE and PCA. First, we use PCA to reduce the dimensions to a reasonable number of features, and after that, we run t-SNE to further reduce the dimensionality of the data.
 
 \subsection{How can you assess the effectiveness of a dimensionality reduction algorithm, used as a preprocessing step, on your dataset by considering the accuracy or error of a downstream model?}
 
-We can assess the effectiveness of a dimensionality reduction algorithm, used as a preprocessing step, on a dataset in the following way. First, we train the model using the full, non dimensionality reduced data, and evalute its performance on a downstream task $\mathcal{X}$. Afterwards, we apply the dimensionality reduction technique to the data, train the model and evaluate its performance again. Finally, we compare the two performances with each other.
+We can assess the effectiveness of a dimensionality reduction algorithm, used as a preprocessing step, on a dataset in the following way. First, we train the model using the full, nondimensional-reduced data and evaluate its performance on a downstream task $\mathcal{X}$. Afterward, we apply the dimensionality reduction technique to the data, train the model, and evaluate its performance again. Finally, we compare the two performances with each other.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
